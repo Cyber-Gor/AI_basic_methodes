@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+
+data = {
+    'Outlook': ['Sunny', 'Sunny', 'Overcast', 'Rain', 'Rain', 'Rain', 'Overcast', 'Sunny', 'Sunny', 'Rain', 'Sunny'],
+    'Temp': ['Hot', 'Hot', 'Hot', 'Mild', 'Cool', 'Cool', 'Cool', 'Mild', 'Cool', 'Mild', 'Mild'],
+    'Humidity': ['High', 'High', 'High', 'High', 'Normal', 'Normal', 'Normal', 'High', 'Normal', 'Normal', 'Normal'],
+    'Wind': ['Weak', 'Strong', 'Weak', 'Weak', 'Weak', 'Strong', 'Strong', 'Weak', 'Weak', 'Weak', 'Strong'],
+    'Play': ['No', 'No', 'No', 'Yes', 'Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes']
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Outlook', 'Temp', 'Humidity', 'Wind']]
+y = df['Play']
+
+X_encoded = pd.get_dummies(X)
+
+model = RandomForestClassifier(n_estimators=100, random_state=42, max_depth=10, criterion='entropy')
+model.fit(X_encoded, y)
+
+new_data = {
+    'Outlook': ['Rain', 'Overcast', 'Sunny', 'Rain', 'Sunny', 'Overcast'],
+    'Temp': ['Hot', 'Mild', 'Cool', 'Cool', 'Mild', 'Cool'],
+    'Humidity': ['High', 'Normal', 'Normal', 'Normal', 'Normal', 'Normal'],
+    'Wind': ['Strong', 'Weak', 'Weak', 'Strong', 'Weak', 'Weak']
+}
+
+df1 = pd.DataFrame(new_data)
+
+new_encoded = pd.get_dummies(df1)
+
+pred = model.predict(new_encoded)
+
+print("predictions:", pred)
