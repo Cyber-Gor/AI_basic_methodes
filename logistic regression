@@ -1,0 +1,25 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
+
+X = np.array([[0.5], [0.75], [1.0], [1.25], [1.5], [1.75], [2.0], [2.25], [2.5], [2.75], 
+              [3.0], [3.25], [3.5], [4.0], [4.25], [4.5], [4.75], [5.0], [5.5]])
+y = np.array([0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1])
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Прогноз:", y_pred)
+print("Реальные значения:", y_test)
+print("\nОтчет о классификации:")
+print(classification_report(y_test, y_pred))
+
+hours = [[3.1]]
+prob = model.predict_proba(hours)
+print(f"\nВероятность сдачи экзамена при 3.1 ч. подготовки: {prob[0][1]:.2%}")
