@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+
+X, y = make_blobs(n_samples=500, centers=4, cluster_std=0.60, random_state=0)
+
+inertia = []
+K_range = range(1, 11)
+
+for k in K_range:
+    kmeans = KMeans(n_clusters=k, init='k-means++', random_state=42)
+    kmeans.fit(X)
+    inertia.append(kmeans.inertia_)
+
+plt.figure(figsize=(10, 5))
+plt.plot(K_range, inertia, 'bx-')
+plt.xlabel('Количество кластеров (k)')
+plt.ylabel('Инерция (WCSS)')
+plt.title('Метод локтя для поиска оптимального k')
+plt.show()
+
+
+model = KMeans(n_clusters=4, init='k-means++', random_state=42)
+y_kmeans = model.fit_predict(X)
+
+plt.figure(figsize=(10, 5))
+plt.scatter(X[:, 0], X[:, 1], c=y_kmeans, s=30, cmap='viridis')
+
+centers = model.cluster_centers_
+plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, alpha=0.75, marker='X', label='Центроиды')
+plt.legend()
+plt.show()
