@@ -1,0 +1,26 @@
+import tensorflow as tf
+from tensorflow.keras import datasets, layers, models
+#import matplotlib.pyplot as plt
+import numpy as np
+
+(x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+
+model = models.Sequential([layers.Conv2D(8, (3, 3), padding='same', activation='relu', input_shape=(28, 28, 1)),
+                           layers.MaxPooling2D(2, 2),
+                           layers.Conv2D(8, (3, 3), padding='valid', activation='relu'),
+                           layers.MaxPooling2D(3, 3),
+                           layers.Flatten(),
+                           layers.Dense(35, activation='relu'),
+                           layers.Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+model.fit(x_train, y_train, epochs=3, batch_size=40)
+
+y_pred = np.argmax(model.predict(x_test[:5]), 1)
+
+print('Real numbers:', y_test[:5], 'Pred numbers:', y_pred)
