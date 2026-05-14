@@ -1,0 +1,25 @@
+import numpy as np
+import random as rand
+
+def binary_cross_entropy(y_true, y_pred, eps=1e-7):
+    p = np.clip(y_pred, eps, 1 - eps)
+    return -np.mean(y_true * np.log(p) + (1 - y_true) * np.log(1 - p))
+
+loss = binary_cross_entropy(y_test, y_pred)
+
+x = np.random.randint(0, 2, size=(100, 2, 8))
+y = np.bitwise_xor(x[:, 0], x[:, 1])
+
+x_train, y_train = x[:80], y[:80]
+x_test, y_test = x[80:], y[80:]
+
+def relu(x):
+    return np.maximum(0, x)
+
+k = rand.randint(-10, 10)
+c = rand.randint(-10, 10)
+a = k*x+c 
+b = relu(a)
+
+
+
